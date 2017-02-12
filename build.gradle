@@ -1,0 +1,62 @@
+buildscript {
+    ext {
+        springBootVersion = '1.4.0.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+//apply from: 'https://web.livfame.com/gitInfo.gradle'
+
+jar {
+    baseName = 'DareMeServer'
+}
+
+task docs(type: Javadoc) {
+    source = sourceSets.main.allJava
+    classpath = sourceSets.main.compileClasspath
+    destinationDir = new File("$buildDir/javaDoc/")
+}
+build.finalizedBy 'docs'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven { url 'http://artifactory.videoready.tv/artifactory/libs-release-local' }
+    maven { url 'http://artifactory.videoready.tv/artifactory/libs-snapshot-local' }
+}
+
+ext {
+    springBootVersion = "1.4.0.RELEASE"
+    mysqlConnectorVersion = '5.1.39'
+}
+
+dependencies {
+//    compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
+//    compile("org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-jetty:${springBootVersion}")
+//    compile("mysql:mysql-connector-java:${mysqlConnectorVersion}")
+//    compile group: 'org.hibernate', name: 'hibernate-validator', version: '4.3.2.Final'
+
+    // compile(group: 'tv.videoready', name: 'module-heartbeat', version: '0.0.1-SNAPSHOT')
+    // compile(group: 'tv.videoready', name: 'git-info', version: '0.0.1-SNAPSHOT')
+    // compile(group: 'tv.videoready', name: 'module-logger', version: '0.0.1-SNAPSHOT')
+    // compile(group: 'tv.videoready', name: 'cors-filter', version: '0.0.1')
+}
+
+configurations {
+    compile.exclude module: ("spring-boot-starter-tomcat")
+    compile.exclude module: ("org.springframework.boot:spring-boot-starter-logging")
+}
